@@ -1,0 +1,10 @@
+{
+    "qbitorrent": {
+        "base_url": "http://localhost:8080",
+        "category": "films",
+        "real_save_path": "e:\\films",
+        "username": "admin",
+        "password": "admin"
+    },
+    "kinopoisk_token": "{token from kinopoisk.dev}"
+}
