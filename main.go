@@ -92,7 +92,7 @@ func change() {
 
 	kClient := kinopoisk.NewClient(config.KinopoiskToken)
 
-	fmt.Printf("paste kinopois url or id: ")
+	fmt.Print("paste kinopois url or id: ")
 	var kinopoiskUrl string
 	_, err = fmt.Scanln(&kinopoiskUrl)
 	if err != nil {
@@ -296,9 +296,15 @@ func run() {
 		log.Fatal(err)
 	}
 
-	err = os.WriteFile(nfoPath, nfoData, 0o755)
-	if err != nil {
-		log.Fatal(err)
+	for {
+		err = os.WriteFile(nfoPath, nfoData, 0o755)
+		if err != nil {
+			log.Println(err)
+			time.Sleep(time.Second)
+			continue
+		}
+
+		break
 	}
 
 	imagePath := filepath.Join(config.Qbitorrent.RealSavePath, name, "poster.jpg")
@@ -335,12 +341,17 @@ func PickFile(files []qbitorrent.TorrentsFiles) qbitorrent.TorrentsFiles {
 var kinopoiskUrlRegex = regexp.MustCompile(`\.kinopoisk\.ru/film/(\d+)`)
 
 func parseKinopoiskUrl(url string) int {
+	id, err := strconv.Atoi(url)
+	if err == nil {
+		return id
+	}
+
 	match := kinopoiskUrlRegex.FindStringSubmatch(url)
 	if len(match) == 0 {
 		return -1
 	}
 
-	id, err := strconv.Atoi(match[1])
+	id, err = strconv.Atoi(match[1])
 	if err != nil {
 		return -1
 	}
